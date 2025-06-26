@@ -13,7 +13,11 @@ Adoramos contribuições! Se você tem ideias, correções de bugs ou novas func
     Substitua `SEU_USUARIO` pelo seu nome de usuário do GitHub.
 
 3.  **Crie uma Nova Branch:**
-    Crie uma nova branch para as suas alterações. Use um nome descritivo para a branch (ex: `feature/nova-funcionalidade` ou `fix/bug-de-download`).
+    Crie uma nova branch para as suas alterações, seguindo a convenção de nomenclatura:
+    *   `feature/nome-da-funcionalidade`: Para novas funcionalidades.
+    *   `fix/nome-do-bug`: Para correção de bugs.
+    *   `docs/atualizacao-documentacao`: Para atualizações na documentação.
+    *   `refactor/nome-da-refatoracao`: Para refatorações de código.
     ```bash
     git checkout -b nome-da-sua-branch
     ```
