@@ -52,6 +52,7 @@ Para garantir que o PegaTudo continue a ser uma ferramenta útil e abrangente, t
     - [ ] Expandir a capacidade de detecção para incluir mais tipos de mídia (áudios, documentos, etc.).
     - [ ] Aprimorar a lógica de download para lidar com diferentes estruturas de sites e plataformas.
     - [ ] Implementar o download direto de stickers e outros formatos de mídia específicos de plataformas como WhatsApp.
+    - [ ] Suporte para download de URLs blob.
 
 - [ ] **Suporte Abrangente a Plataformas:**
     - [ ] Garantir compatibilidade total com as principais plataformas de vídeo e imagem (YouTube, Instagram, TikTok, Facebook, Twitter, etc.).
