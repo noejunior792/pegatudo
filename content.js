@@ -74,7 +74,7 @@ function createDownloadButton(mediaElement) {
       chrome.runtime.sendMessage({ action: "download", url, filename }, (response) => {
         if (response && response.error) {
           console.error("Erro no download:", response.error);
-          button.textContent = isBlobUrl ? "Falha Blob: Tente outro método!" : "Falhou!";
+          button.textContent = isBlobUrl ? "Blob URL: Download instável. Tente inspecionar!" : "Falhou!";
           setTimeout(() => { button.textContent = initialButtonText; }, 5000);
         } else {
           button.textContent = "Baixado!";
