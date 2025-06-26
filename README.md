@@ -1,6 +1,48 @@
 # PegaTudo
 
-Baixe vídeos e imagens de qualquer site com um clique.
+O PegaTudo é uma extensão para Chrome que transforma a maneira como você baixa conteúdo da web. Cansado de não conseguir baixar aquele vídeo ou imagem? Com o PegaTudo, você pode baixar praticamente qualquer mídia, de qualquer site, com a ajuda da poderosa ferramenta de linha de comando `yt-dlp`.
+
+## ✨ Funcionalidades
+
+*   **Downloads Universais de Vídeo:** Gera comandos de download para vídeos em qualquer site, não apenas no YouTube. Se o `yt-dlp` consegue baixar, você também consegue!
+*   **Download de Imagens e Áudios:** Baixe imagens e áudios com um único clique.
+*   **Suporte a Playlists do YouTube:** Gere um único comando para baixar todos os vídeos de uma playlist do YouTube de uma só vez.
+*   **Integração com `yt-dlp`:** Em vez de tentar reinventar a roda, o PegaTudo integra-se perfeitamente com o `yt-dlp`, a ferramenta padrão-ouro para downloads de vídeo, garantindo a máxima qualidade e confiabilidade.
+
+## 🐧 Otimizado para Linux
+
+Esta extensão foi desenhada a pensar nos utilizadores de Linux. A sua funcionalidade principal baseia-se na geração de comandos que podem ser colados diretamente no terminal. Para usar todo o poder do PegaTudo, você precisará ter o `yt-dlp` instalado no seu sistema.
+
+**Instalando o `yt-dlp`:**
+```bash
+sudo apt update
+sudo apt install yt-dlp
+```
+
+## 🛠️ Como Usar
+
+1.  **Instale a Extensão:**
+    *   Clone ou baixe este repositório:
+        ```bash
+        git clone https://github.com/noejunior792/pegatudo.git
+        ```
+    *   Abra o Google Chrome e navegue até `chrome://extensions`.
+    *   Ative o "Modo de Programador" no canto superior direito.
+    *   Clique em "Carregar sem compactação".
+    *   Selecione o diretório onde você clonou/baixou o repositório.
+
+2.  **Para Vídeos:**
+    *   Passe o mouse sobre qualquer vídeo em qualquer site.
+    *   Clique no botão **"Gerar Comando de Download"**.
+    *   Cole o comando copiado no seu terminal e pressione Enter. A mágica acontece!
+
+3.  **Para Playlists do YouTube:**
+    *   Navegue até uma página de playlist no YouTube.
+    *   Clique no botão **"Gerar Comando para Playlist"** que aparece no cabeçalho da playlist.
+    *   Cole o comando no seu terminal para baixar todos os vídeos.
+
+4.  **Para Imagens e Áudios:**
+    *   Passe o mouse sobre a imagem ou áudio e clique em **"Baixar"**.
 
 ## Objetivos para o Crescimento do PegaTudo
 
@@ -27,48 +69,10 @@ Para garantir que o PegaTudo continue a ser uma ferramenta útil e abrangente, t
     - [ ] Monitorar e adaptar a extensão às mudanças nas plataformas e tecnologias da web.
     - [ ] Lançar atualizações regulares com novas funcionalidades e correções de bugs.
 
-## Como Contribuir
-
-Adoramos contribuições! Se você tem ideias, correções de bugs ou novas funcionalidades para adicionar, siga os passos abaixo para contribuir com o PegaTudo:
-
-1.  **Faça um Fork do Repositório:**
-    Clique no botão "Fork" no canto superior direito da página do GitHub do PegaTudo para criar uma cópia do projeto em sua conta.
-
-2.  **Clone o Repositório Forkado:**
-    Clone o seu fork para a sua máquina local usando o comando:
-    ```bash
-    git clone https://github.com/SEU_USUARIO/pegatudo.git
-    ```
-    Substitua `SEU_USUARIO` pelo seu nome de usuário do GitHub.
-
-3.  **Crie uma Nova Branch:**
-    Crie uma nova branch para as suas alterações. Use um nome descritivo para a branch (ex: `feature/nova-funcionalidade` ou `fix/bug-de-download`).
-    ```bash
-    git checkout -b nome-da-sua-branch
-    ```
-
-4.  **Faça Suas Alterações:**
-    Implemente suas mudanças, adicione novas funcionalidades ou corrija bugs. Certifique-se de seguir as convenções de código existentes.
-
-5.  **Teste Suas Alterações:**
-    Antes de enviar, teste suas alterações para garantir que tudo funciona como esperado e que não introduziu novos problemas.
-
-6.  **Faça o Commit das Suas Alterações:**
-    Faça o commit das suas alterações com uma mensagem clara e concisa que descreva o que foi feito.
-    ```bash
-    git add .
-    git commit -m "feat: Adiciona nova funcionalidade X" # ou "fix: Corrige bug Y"
-    ```
-
-7.  **Envie Suas Alterações para o GitHub:**
-    Envie a sua branch para o seu repositório forkado no GitHub:
-    ```bash
-    git push origin nome-da-sua-branch
-    ```
-
-8.  **Abra um Pull Request (PR):**
-    Vá para a página do seu repositório forkado no GitHub. Você verá um botão para "Compare & pull request". Clique nele, preencha os detalhes do seu PR (descreva suas alterações, por que elas são necessárias, etc.) e envie. Nossa equipe revisará suas alterações e, se aprovadas, elas serão mescladas ao projeto principal.
-
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## Contribuição
+
+Para saber como contribuir com o projeto, consulte o arquivo [`CONTRIBUTING.md`](CONTRIBUTING.md).
