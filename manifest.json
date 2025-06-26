@@ -1,16 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "MediaDownloader",
-  "version": "1.0",
-  "description": "Download videos, GIFs, and images from websites with pause, resume, and summary options.",
-  "permissions": [
-    "downloads",
-    "activeTab",
-    "storage",
-    "webRequest",
-    "webRequestBlocking",
-    "<all_urls>"
-  ],
+  "name": "PegaTudo",
+  "version": "2.0",
+  "description": "Baixe vídeos e imagens de qualquer site com um clique.",
+  "permissions": ["downloads", "activeTab", "storage", "scripting"],
   "background": {
     "service_worker": "background.js"
   },

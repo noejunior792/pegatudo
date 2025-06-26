@@ -1,107 +1,56 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // Find all media elements
-  const videos = document.querySelectorAll("video");
-  const images = document.querySelectorAll("img");
-  const mediaElements = [...videos, ...images];
+const processedElements = new WeakSet();
 
-  mediaElements.forEach((element) => {
-    // Skip if already processed
-    if (element.dataset.mediaDownloader) return;
-    element.dataset.mediaDownloader = "true";
+function createDownloadButton(mediaElement) {
+  if (processedElements.has(mediaElement)) return;
 
-    // Create popup
-    const popup = document.createElement("div");
-    popup.className = "media-downloader-popup";
-    popup.innerHTML = `
-      <button class="download-btn">Download</button>
-      <button class="pause-btn" disabled>Pause</button>
-      <button class="resume-btn" disabled>Resume</button>
-      <button class="summary-btn" ${element.tagName === "IMG" ? "disabled" : ""}>Summarize</button>
-    `;
+  const button = document.createElement("button");
+  button.textContent = "Baixar";
+  button.className = "pega-tudo-download-button";
 
-    // Position popup over media
-    element.style.position = "relative";
-    element.parentNode.insertBefore(popup, element.nextSibling);
+  const container = document.createElement("div");
+  container.className = "pega-tudo-container";
+  container.appendChild(button);
 
-    // Extract URL
-    const url = element.src || element.currentSrc;
-    const isVideo = element.tagName === "VIDEO";
-    let downloadId = null;
+  mediaElement.parentElement.style.position = "relative";
+  mediaElement.parentElement.appendChild(container);
 
-    // Download button
-    popup.querySelector(".download-btn").addEventListener("click", () => {
-      const filename = `media_${Date.now()}.${isVideo ? "mp4" : "png"}`;
-      chrome.runtime.sendMessage(
-        {
-          action: "download",
-          url,
-          filename,
-        },
-        (response) => {
-          downloadId = response.downloadId;
-          popup.querySelector(".download-btn").disabled = true;
-          popup.querySelector(".pause-btn").disabled = false;
-          popup.querySelector(".resume-btn").disabled = false;
-        },
-      );
-    });
+  processedElements.add(mediaElement);
 
-    // Pause button
-    popup.querySelector(".pause-btn").addEventListener("click", () => {
-      if (downloadId) {
-        chrome.runtime.sendMessage(
-          { action: "pause", downloadId },
-          (response) => {
-            if (response.status === "paused") {
-              popup.querySelector(".pause-btn").disabled = true;
-              popup.querySelector(".resume-btn").disabled = false;
-            }
-          },
-        );
+  button.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const url = mediaElement.src || mediaElement.currentSrc;
+    const isVideo = mediaElement.tagName === "VIDEO";
+    const extension = isVideo ? "mp4" : new URL(url).pathname.split(".").pop() || "jpg";
+    const filename = `media_${Date.now()}.${extension}`;
+
+    chrome.runtime.sendMessage({ action: "download", url, filename }, (response) => {
+      if (response.error) {
+        console.error("Erro no download:", response.error);
+        button.textContent = "Falhou!";
+      } else {
+        button.textContent = "Baixado!";
+        button.disabled = true;
       }
     });
-
-    // Resume button
-    popup.querySelector(".resume-btn").addEventListener("click", () => {
-      if (downloadId) {
-        chrome.runtime.sendMessage(
-          { action: "resume", downloadId },
-          (response) => {
-            if (response.status === "resumed") {
-              popup.querySelector(".pause-btn").disabled = false;
-              popup.querySelector(".resume-btn").disabled = true;
-            }
-          },
-        );
-      }
-    });
-
-    // Summarize button (videos only)
-    if (isVideo) {
-      popup.querySelector(".summary-btn").addEventListener("click", () => {
-        chrome.runtime.sendMessage({ action: "summarize", url }, (response) => {
-          if (response.summary) {
-            alert(`Summary: ${response.summary}`);
-          } else {
-            alert(`Error: ${response.error}`);
-          }
-        });
-      });
-    }
   });
-});
+}
 
-// Observe DOM changes for dynamically loaded media
+function findMedia() {
+  document.querySelectorAll("video, img").forEach(createDownloadButton);
+}
+
 const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.addedNodes.length) {
-      mutation.addedNodes.forEach((node) => {
-        if (node.tagName === "VIDEO" || node.tagName === "IMG") {
-          // Re-run media detection
-          document.dispatchEvent(new Event("DOMContentLoaded"));
+  for (const mutation of mutations) {
+    for (const node of mutation.addedNodes) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        node.querySelectorAll("video, img").forEach(createDownloadButton);
+        if (node.matches("video, img")) {
+          createDownloadButton(node);
         }
-      });
+      }
     }
-  });
+  }
 });
+
+findMedia();
 observer.observe(document.body, { childList: true, subtree: true });

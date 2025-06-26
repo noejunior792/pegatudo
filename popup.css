@@ -1,22 +1,74 @@
-.media-downloader-popup {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 1000;
-    display: flex;
-    gap: 5px;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  width: 280px;
 }
 
-.media-downloader-popup button {
-    padding: 5px 10px;
-    cursor: pointer;
+.container {
+  padding: 20px;
+  text-align: center;
 }
 
-.media-downloader-popup button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 22px;
+  color: #1c1e21;
+  margin: 0 0 10px;
+}
+
+p {
+  font-size: 14px;
+  color: #606770;
+  margin-bottom: 20px;
+}
+
+#openDownloads {
+  background-color: #1877f2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#openDownloads:hover {
+  background-color: #166fe5;
+}
+
+.pega-tudo-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 9999;
+}
+
+.pega-tudo-download-button {
+  background-color: rgba(24, 119, 242, 0.9);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+  opacity: 0.8;
+}
+
+.pega-tudo-download-button:hover {
+  background-color: #166fe5;
+  opacity: 1;
+}
+
+.pega-tudo-download-button:disabled {
+  background-color: #4caf50;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
