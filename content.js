@@ -11,15 +11,17 @@ function createDownloadButton(mediaElement) {
   const button = document.createElement("button");
   button.className = "pega-tudo-download-button";
 
+  let initialButtonText;
   if (isVideo) {
-    button.textContent = "Gerar Comando de Download";
+    initialButtonText = "Gerar Comando de Download";
   } else if (isAudio) {
-    button.textContent = "Baixar Áudio";
+    initialButtonText = "Baixar Áudio";
   } else if (isSource) {
-    button.textContent = "Baixar Mídia";
+    initialButtonText = "Baixar Mídia";
   } else {
-    button.textContent = "Baixar Imagem";
+    initialButtonText = "Baixar Imagem";
   }
+  button.textContent = initialButtonText;
 
   const container = document.createElement("div");
   container.className = "pega-tudo-container";
@@ -72,7 +74,8 @@ function createDownloadButton(mediaElement) {
       chrome.runtime.sendMessage({ action: "download", url, filename }, (response) => {
         if (response && response.error) {
           console.error("Erro no download:", response.error);
-          button.textContent = "Falhou!";
+          button.textContent = isBlobUrl ? "Falha Blob: Tente outro método!" : "Falhou!";
+          setTimeout(() => { button.textContent = initialButtonText; }, 5000);
         } else {
           button.textContent = "Baixado!";
           button.disabled = true;
