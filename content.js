@@ -34,14 +34,12 @@ function createDownloadButton(mediaElement) {
   button.addEventListener("click", (e) => {
     e.stopPropagation();
 
-    if (isVideo) {
-      const videoUrl = window.location.hostname.includes("youtube.com") ? window.location.href : (mediaElement.src || mediaElement.currentSrc);
-      if (videoUrl.startsWith("blob:")) {
-        button.textContent = "URL Blob: yt-dlp não suporta!";
-        setTimeout(() => { button.textContent = "Gerar Comando de Download"; }, 5000);
-        return;
-      }
-      const command = `yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' "${videoUrl}"`;
+    const url = mediaElement.src || mediaElement.currentSrc;
+    const isBlobUrl = url.startsWith("blob:");
+    const isYouTubeVideo = isVideo && window.location.hostname.includes("youtube.com");
+
+    if (isVideo && !isBlobUrl && !isYouTubeVideo) { // Regular video, not YouTube, not blob
+      const command = `yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' "${url}"`;
       navigator.clipboard.writeText(command).then(() => {
         button.textContent = "Comando Copiado!";
         setTimeout(() => { button.textContent = "Gerar Comando de Download"; }, 3000);
@@ -49,18 +47,26 @@ function createDownloadButton(mediaElement) {
         console.error('Falha ao copiar comando: ', err);
         button.textContent = "Falhou!";
       });
-    } else if (isAudio || isSource || mediaElement.tagName === 'IMG') {
-      const url = mediaElement.src || mediaElement.currentSrc;
+    } else if (isYouTubeVideo) { // YouTube video (always use page URL for yt-dlp)
+      const command = `yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' "${window.location.href}"`;
+      navigator.clipboard.writeText(command).then(() => {
+        button.textContent = "Comando Copiado!";
+        setTimeout(() => { button.textContent = "Gerar Comando de Download"; }, 3000);
+      }).catch(err => {
+        console.error('Falha ao copiar comando: ', err);
+        button.textContent = "Falhou!";
+      });
+    } else { // All other cases: audio, source, image, or video with blob URL
       let filename;
       try {
         const urlObj = new URL(url);
         const pathname = urlObj.pathname;
         const extension = pathname.split('.').pop();
         const baseName = pathname.split('/').pop().split('.')[0];
-        const mediaType = isAudio ? 'audio' : (mediaElement.tagName === 'IMG' ? 'imagem' : 'midia');
+        const mediaType = isAudio ? 'audio' : (mediaElement.tagName === 'IMG' ? 'imagem' : (isVideo ? 'video' : 'midia'));
         filename = `${baseName || mediaType}_${Date.now()}.${extension || 'bin'}`.replace(/[<>:"/\\|?*]/g, '_');
       } catch (error) {
-        filename = `midia_${Date.now()}.bin`;
+        filename = `${(isVideo ? 'video' : 'midia')}_${Date.now()}.bin`; // More specific default for video blobs
       }
 
       chrome.runtime.sendMessage({ action: "download", url, filename }, (response) => {
