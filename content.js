@@ -36,6 +36,11 @@ function createDownloadButton(mediaElement) {
 
     if (isVideo) {
       const videoUrl = window.location.hostname.includes("youtube.com") ? window.location.href : (mediaElement.src || mediaElement.currentSrc);
+      if (videoUrl.startsWith("blob:")) {
+        button.textContent = "URL Blob: yt-dlp não suporta!";
+        setTimeout(() => { button.textContent = "Gerar Comando de Download"; }, 5000);
+        return;
+      }
       const command = `yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' "${videoUrl}"`;
       navigator.clipboard.writeText(command).then(() => {
         button.textContent = "Comando Copiado!";
