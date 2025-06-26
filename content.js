@@ -12,7 +12,14 @@ function createDownloadButton(mediaElement) {
   if (processedElements.has(mediaElement) || mediaElement.closest('.pega-tudo-container')) return;
 
   const button = document.createElement("button");
-  button.textContent = "Baixar";
+  const isYouTube = window.location.hostname.includes("youtube.com");
+  const isVideo = mediaElement.tagName === 'VIDEO';
+
+  if (isYouTube && isVideo) {
+    button.textContent = "Gerar Comando de Download";
+  } else {
+    button.textContent = "Baixar";
+  }
   button.className = "pega-tudo-download-button";
 
   const container = document.createElement("div");
@@ -27,31 +34,37 @@ function createDownloadButton(mediaElement) {
 
   button.addEventListener("click", (e) => {
     e.stopPropagation();
-    const url = mediaElement.src || mediaElement.currentSrc;
-    const isVideo = mediaElement.tagName === 'VIDEO';
-    const isYouTube = window.location.hostname.includes("youtube.com");
 
-    let filename;
     if (isYouTube && isVideo) {
-      filename = `${getYouTubeVideoTitle() || 'youtube_video'}.mp4`;
+      const videoUrl = window.location.href;
+      const command = `yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' "${videoUrl}"`;
+      navigator.clipboard.writeText(command).then(() => {
+        button.textContent = "Comando Copiado!";
+        setTimeout(() => { button.textContent = "Gerar Comando de Download"; }, 3000);
+      }).catch(err => {
+        console.error('Falha ao copiar comando: ', err);
+        button.textContent = "Falhou!";
+      });
     } else {
+      const url = mediaElement.src || mediaElement.currentSrc;
+      let filename;
       try {
         const extension = new URL(url).pathname.split('.').pop() || 'jpg';
         filename = `media_${Date.now()}.${extension}`.replace(/[<>:"/\\|?*]/g, '_');
       } catch (error) {
         filename = `media_${Date.now()}.jpg`;
       }
-    }
 
-    chrome.runtime.sendMessage({ action: "download", url, filename }, (response) => {
-      if (response && response.error) {
-        console.error("Erro no download:", response.error);
-        button.textContent = "Falhou!";
-      } else {
-        button.textContent = "Baixado!";
-        button.disabled = true;
-      }
-    });
+      chrome.runtime.sendMessage({ action: "download", url, filename }, (response) => {
+        if (response && response.error) {
+          console.error("Erro no download:", response.error);
+          button.textContent = "Falhou!";
+        } else {
+          button.textContent = "Baixado!";
+          button.disabled = true;
+        }
+      });
+    }
   });
 }
 
