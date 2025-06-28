@@ -8,9 +8,8 @@ Adoramos contribuições! Se você tem ideias, correções de bugs ou novas func
 2.  **Clone o Repositório Forkado:**
     Clone o seu fork para a sua máquina local usando o comando:
     ```bash
-    git clone https://github.com/SEU_USUARIO/pegatudo.git
+    git clone https://github.com/noejunior792/pegatudo.git
     ```
-    Substitua `SEU_USUARIO` pelo seu nome de usuário do GitHub.
 
 3.  **Crie uma Nova Branch:**
     Crie uma nova branch para as suas alterações, seguindo a convenção de nomenclatura:
