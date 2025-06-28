@@ -1,6 +1,6 @@
 # PegaTudo
 
-O PegaTudo é uma extensão para Chrome que transforma a maneira como você baixa conteúdo da web. Cansado de não conseguir baixar aquele vídeo ou imagem? Com o PegaTudo, você pode baixar praticamente qualquer mídia, de qualquer site, com a ajuda da poderosa ferramenta de linha de comando `yt-dlp`.
+O PegaTudo é uma extensão para Chrome que transforma a maneira como você baixa conteúdo da web. Cansado de não conseguir baixar aquele vídeo ou imagem? Com o PegaTudo, você pode baixar praticamente qualquer mídia, de qualquer site, com a ajuda da poderosa ferramenta de linha de comando `yt-dlp(Atualmente)`.
 
 ## ✨ Funcionalidades
 
