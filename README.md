@@ -14,9 +14,32 @@ O PegaTudo é uma extensão para Chrome que transforma a maneira como você baix
 Esta extensão foi desenhada a pensar nos utilizadores de Linux. A sua funcionalidade principal baseia-se na geração de comandos que podem ser colados diretamente no terminal. Para usar todo o poder do PegaTudo, você precisará ter o `yt-dlp` instalado no seu sistema.
 
 **Instalando o `yt-dlp`:**
+
+Para usar todas as funcionalidades do PegaTudo, você precisa ter o `yt-dlp` instalado no seu sistema. Visite a página oficial do projeto para baixar e instalar:
+
+🔗 **[https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)**
+
+**Métodos de instalação:**
+
+1. **Via gerenciador de pacotes (recomendado para a maioria das distribuições):**
+   ```bash
+   sudo apt update
+   sudo apt install yt-dlp
+   ```
+
+2. **Via pip (Python):**
+   ```bash
+   pip install yt-dlp
+   ```
+
+3. **Download direto do executável:**
+   - Acesse [https://github.com/yt-dlp/yt-dlp/releases](https://github.com/yt-dlp/yt-dlp/releases)
+   - Baixe a versão mais recente para o seu sistema
+   - Torne o arquivo executável e mova para `/usr/local/bin/` ou adicione ao PATH
+
+**Verificando a instalação:**
 ```bash
-sudo apt update
-sudo apt install yt-dlp
+yt-dlp --version
 ```
 
 ## 🛠️ Como Usar
