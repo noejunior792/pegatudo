@@ -21,5 +21,11 @@
   },
   "action": {
     "default_popup": "popup.html"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/icon128.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
