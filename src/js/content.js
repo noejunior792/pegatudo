@@ -2,9 +2,17 @@ const processedElements = new WeakSet();
 let extensionEnabled = true;
 let mediaRecorder = null;
 let recordedChunks = [];
+let debugMode = false;
 
-chrome.storage.sync.get(['extensionEnabled'], (result) => {
+function log(...args) {
+    if (debugMode) {
+        console.log('PegaTudo:', ...args);
+    }
+}
+
+chrome.storage.sync.get(['extensionEnabled', 'debugMode'], (result) => {
     extensionEnabled = result.extensionEnabled !== false;
+    debugMode = result.debugMode === true;
     if (extensionEnabled) {
         initialize();
     }
@@ -19,9 +27,21 @@ chrome.runtime.onMessage.addListener((message) => {
             removeAllUI();
         }
     }
+    if (message.action === 'toggleDebugMode') {
+        debugMode = message.enabled;
+    }
+});
+
+window.addEventListener('mediaDiscovered', (event) => {
+    log('Discovered media:', event.detail);
+    // We need to find the element associated with this URL
+    // This is a simplified approach; a real implementation would need a more robust way to link URLs to elements
+    const elements = document.querySelectorAll(`[src="${event.detail.url}"]`);
+    elements.forEach(addButtons);
 });
 
 function initialize() {
+    log('Initializing');
     run();
     const observer = new MutationObserver(run);
     observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'href'] });
@@ -68,21 +88,33 @@ function createButtonContainer(element) {
 }
 
 async function handleDownload(url, element) {
+    log(`Handling download for: ${url}`);
     let blob, filename;
 
     try {
         if (url.startsWith('blob:')) {
-            const response = await fetch(url);
-            blob = await response.blob();
+            try {
+                const response = await fetch(url);
+                blob = await response.blob();
+            } catch (e) {
+                log('Direct fetch failed, trying ArrayBuffer fallback');
+                const arrayBuffer = await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', url, true);
+                    xhr.responseType = 'arraybuffer';
+                    xhr.onload = () => resolve(xhr.response);
+                    xhr.onerror = reject;
+                    xhr.send();
+                });
+                blob = new Blob([arrayBuffer]);
+            }
             filename = `blob_${Date.now()}.${getFileExtension(blob.type)}`;
         } else if (url.startsWith('data:')) {
             blob = await dataURLToBlob(url);
             filename = `data_${Date.now()}.${getFileExtension(blob.type)}`;
         } else {
-            const response = await fetch(url);
-            const contentType = response.headers.get('content-type');
-            blob = await response.blob();
-            filename = `file_${Date.now()}.${getFileExtension(contentType)}`;
+            chrome.runtime.sendMessage({ action: 'download', url, filename: `file_${Date.now()}` });
+            return;
         }
 
         const file = new File([blob], filename, { type: blob.type });
@@ -95,7 +127,7 @@ async function handleDownload(url, element) {
         URL.revokeObjectURL(downloadUrl);
 
     } catch (error) {
-        console.error('PegaTudo Error:', error);
+        log('Error:', error);
         alert('Download failed. See console for details.');
     }
 }
@@ -142,7 +174,6 @@ function addButtons(element) {
 
     const shadowRoot = createButtonContainer(element);
 
-    // Download button
     const downloadButton = document.createElement('button');
     downloadButton.textContent = 'Baixar';
     downloadButton.className = 'pega-tudo-button';
@@ -153,7 +184,6 @@ function addButtons(element) {
     };
     shadowRoot.appendChild(downloadButton);
 
-    // Record button for videos
     if (element.tagName === 'VIDEO') {
         const recordButton = document.createElement('button');
         recordButton.textContent = 'Gravar Tela';
@@ -179,12 +209,4 @@ function run() {
             addButtons(el);
         }
     });
-
-    // Special handling for YouTube
-    if (window.location.hostname.includes('youtube.com')) {
-        const video = document.querySelector('video');
-        if (video && !processedElements.has(video)) {
-            addButtons(video);
-        }
-    }
 }

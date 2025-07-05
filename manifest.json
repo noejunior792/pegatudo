@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PegaTudo",
-  "version": "2.1",
+  "version": "2.2",
   "description": "Baixe vídeos, imagens e outros arquivos de qualquer site.",
   "permissions": [
     "downloads",
@@ -9,16 +9,18 @@
     "storage",
     "scripting",
     "unlimitedStorage",
-    "tabs"
+    "tabs",
+    "debugger"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/js/background.js"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["utils.js", "content.js"],
-      "css": ["popup.css"]
+      "js": ["src/js/utils.js", "src/js/interceptor.js", "src/js/content.js"],
+      "css": ["src/css/popup.css"],
+      "run_at": "document_start"
     }
   ],
   "icons": {

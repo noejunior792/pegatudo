@@ -4,21 +4,25 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "download") {
-        handleStreamDownload(message, sendResponse);
-        return true; // Keep channel open for async response
+        handleStreamDownload(message, sender.tab.id);
+        sendResponse({ success: true });
     }
+    return true;
 });
 
-async function handleStreamDownload({ url, filename }, sendResponse) {
+async function handleStreamDownload({ url, filename }, tabId) {
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        const contentLength = response.headers.get('content-length');
+        const total = parseInt(contentLength, 10);
+        let receivedLength = 0;
+
         const reader = response.body.getReader();
         const chunks = [];
-        let receivedLength = 0;
 
         while (true) {
             const { done, value } = await reader.read();
@@ -27,7 +31,11 @@ async function handleStreamDownload({ url, filename }, sendResponse) {
             }
             chunks.push(value);
             receivedLength += value.length;
-            // Optional: send progress update to UI
+
+            if (contentLength) {
+                const progress = Math.round((receivedLength / total) * 100);
+                chrome.tabs.sendMessage(tabId, { action: 'downloadProgress', progress, filename });
+            }
         }
 
         const blob = new Blob(chunks);
@@ -40,13 +48,11 @@ async function handleStreamDownload({ url, filename }, sendResponse) {
         }, (downloadId) => {
             URL.revokeObjectURL(downloadUrl);
             if (chrome.runtime.lastError) {
-                sendResponse({ error: chrome.runtime.lastError.message });
-            } else {
-                sendResponse({ success: true, downloadId });
+                console.error(chrome.runtime.lastError);
             }
         });
 
     } catch (error) {
-        sendResponse({ error: error.message });
+        console.error(error);
     }
 }

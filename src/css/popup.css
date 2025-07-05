@@ -183,3 +183,15 @@ input:checked + .slider:before {
     background-color: #cccccc;
     cursor: not-allowed;
 }
+
+.control-panel {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.control-panel h2 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}

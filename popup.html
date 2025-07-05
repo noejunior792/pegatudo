@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>PegaTudo</title>
-  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="src/css/popup.css">
 </head>
 <body>
   <div class="container">
@@ -17,9 +17,20 @@
       </label>
       <span id="toggleStatus">Ativado</span>
     </div>
+
+    <div class="control-panel">
+        <h2>Painel de Controle</h2>
+        <div class="toggle-section">
+            <label class="toggle-switch">
+                <input type="checkbox" id="debugModeToggle">
+                <span class="slider"></span>
+            </label>
+            <span>Modo de Depuração</span>
+        </div>
+    </div>
     
     <button id="openDownloads">Ver Downloads</button>
   </div>
-  <script src="popup.js"></script>
+  <script src="src/js/popup.js"></script>
 </body>
 </html>
