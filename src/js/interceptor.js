@@ -1,21 +1,44 @@
+// Intercept network requests to find media files.
+// This script is injected into the page context.
+
 const originalFetch = window.fetch;
-window.fetch = async function(...args) {
-    const response = await originalFetch.apply(this, args);
-    const url = args[0] instanceof Request ? args[0].url : args[0];
+window.fetch = function(...args) {
+  // Execute the original fetch and get the promise
+  const requestPromise = originalFetch.apply(this, args);
 
-    if (response.headers.get('Content-Type')?.match(/video|image/)) {
+  // Attach a non-blocking listener to the promise
+  requestPromise.then(response => {
+    try {
+      // It's crucial to clone the response, as the body can only be read once.
+      const clone = response.clone();
+      const contentType = clone.headers.get('Content-Type') || '';
+      
+      if (contentType.match(/video|image|audio/)) {
+        const url = args[0] instanceof Request ? args[0].url : args[0];
         window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url, type: 'fetch' } }));
+      }
+    } catch (e) {
+      // Silently catch errors to avoid breaking the host page
     }
+  }).catch(() => {
+    // Also catch potential promise rejections silently
+  });
 
-    return response;
+  // Return the original, untouched promise immediately
+  return requestPromise;
 };
 
 const originalXhrOpen = window.XMLHttpRequest.prototype.open;
-window.XMLHttpRequest.prototype.open = function(method, url) {
+window.XMLHttpRequest.prototype.open = function(...args) {
     this.addEventListener('load', () => {
-        if (this.responseURL && this.getResponseHeader('Content-Type')?.match(/video|image/)) {
-            window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url: this.responseURL, type: 'xhr' } }));
+        try {
+            const contentType = this.getResponseHeader('Content-Type') || '';
+            if (this.responseURL && contentType.match(/video|image|audio/)) {
+                window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url: this.responseURL, type: 'xhr' } }));
+            }
+        } catch (e) {
+            // Silently catch errors to avoid breaking the host page
         }
     });
-    originalXhrOpen.apply(this, arguments);
+    return originalXhrOpen.apply(this, args);
 };
