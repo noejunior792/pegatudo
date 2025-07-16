@@ -1,46 +1,57 @@
 # PegaTudo
 
-O PegaTudo é uma extensão para Chrome que transforma a maneira como você baixa conteúdo da web. Cansado de não conseguir baixar aquele vídeo ou imagem? Com o PegaTudo, você pode baixar praticamente qualquer mídia, de qualquer site.
+O PegaTudo é uma extensão para Chrome que transforma a maneira como você baixa conteúdo da web. Com um painel de mídia centralizado, ele detecta e lista todos os vídeos, imagens e áudios de uma página, permitindo que você baixe o que quiser com um único clique.
 
 ## ✨ Funcionalidades
 
-*   **Downloads Universais:** Baixe vídeos, imagens, áudios e outros arquivos de qualquer site.
-*   **Suporte a Vários Formatos:** Suporte completo para `Blob`, `File`, `ArrayBuffer`, `Data URLs`, `MediaStream` e `Object URLs`.
-*   **Gravação de Tela:** Grave a tela, a câmera ou o áudio diretamente do navegador.
-*   **Downloads Progressivos:** Acompanhe o progresso de downloads grandes.
-*   **Detecção Inteligente:** Detecta mídias inseridas dinamicamente na página.
-*   **Interface Isolada:** A interface do usuário não entra em conflito com o estilo da página.
-*   **Modo de Depuração:** Ative o modo de depuração para ver logs detalhados no console.
+*   **Painel de Mídia Centralizado:** Todas as mídias detectadas na página são listadas de forma organizada na popup da extensão.
+*   **Downloads Universais:** Baixe vídeos, imagens e áudios com facilidade.
+*   **Suporte a Streaming HLS:** Baixa vídeos de streams HLS (`.m3u8`), juntando todos os segmentos em um único arquivo.
+*   **Baixar Todos:** Baixe todas as mídias diretas (não-stream) da página com um único botão.
+*   **Detecção Inteligente:** Intercepta o tráfego da página para encontrar mídias carregadas dinamicamente.
+*   **Notificações de Progresso:** Acompanhe o andamento dos downloads de stream através de notificações.
+*   **Página de Configurações:** Personalize o comportamento da extensão, como ativar o modo de depuração.
 
 ## 🛠️ Como Usar
 
 1.  **Instale a Extensão:**
     *   Clone ou baixe este repositório.
-    *   Abra o Google Chrome e navegue até `chrome://extensions`.
-    *   Ative o "Modo de Programador".
+    *   Abra seu navegador (Chrome, Brave, etc.) e navegue até a página de extensões (ex: `chrome://extensions`).
+    *   Ative o "Modo de Desenvolvedor".
     *   Clique em "Carregar sem compactação" e selecione o diretório do projeto.
 
 2.  **Baixando Mídias:**
-    *   Passe o mouse sobre qualquer vídeo, imagem ou áudio.
-    *   Clique no botão **"Baixar"**.
-
-3.  **Gravando a Tela:**
-    *   Passe o mouse sobre um vídeo.
-    *   Clique no botão **"Gravar Tela"**.
+    *   Abra a página que contém as mídias que você deseja.
+    *   Clique no ícone do PegaTudo na barra de ferramentas do navegador.
+    *   A popup mostrará uma lista de todas as mídias encontradas.
+    *   Clique no botão de download ao lado do item desejado ou use o botão "Baixar Todos".
 
 ## 📂 Estrutura do Projeto
+
+A estrutura foi refatorada para ser mais modular e escalável.
 
 ```
 pegatudo/
 ├── src/
-│   ├── js/
-│   │   ├── background.js
-│   │   ├── content.js
-│   │   ├── interceptor.js
-│   │   ├── popup.js
-│   │   └── utils.js
-│   └── css/
-│       └── popup.css
+│   ├── css/
+│   │   ├── features/
+│   │   │   ├── media-list.css
+│   │   │   ├── settings.css
+│   │   │   └── toast.css
+│   │   └── popup.css
+│   ├── html/
+│   │   └── settings.html
+│   └── js/
+│       ├── services/
+│       │   ├── hls-downloader.js
+│       │   ├── media-list.js
+│       │   ├── settings.js
+│       │   └── toast.js
+│       ├── background.js
+│       ├── content.js
+│       ├── interceptor.js
+│       ├── popup.js
+│       └── utils.js
 ├── icons/
 ├── popup.html
 ├── manifest.json
