@@ -1,0 +1,65 @@
+/* Estilos para a lista de mídias na popup */
+#mediaList {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.media-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.media-item:last-child {
+    border-bottom: none;
+}
+
+.media-item img.thumbnail {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 10px;
+    background-color: #f0f0f0;
+}
+
+.media-info {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.media-info .media-url {
+    color: #555;
+    display: block;
+}
+
+.media-info .media-type {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.media-actions button {
+    all: unset;
+    cursor: pointer;
+    margin-left: 8px;
+    padding: 5px;
+}
+
+.media-actions button img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.media-actions button:hover img {
+    opacity: 1;
+}

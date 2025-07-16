@@ -1,0 +1,22 @@
+/* Estilos para as notificações "toast" */
+.pega-tudo-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 25px;
+    z-index: 99999;
+    font-family: sans-serif;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.3s, bottom 0.3s;
+}
+
+.pega-tudo-toast.show {
+    opacity: 1;
+    bottom: 30px;
+}

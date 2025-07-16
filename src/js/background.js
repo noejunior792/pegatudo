@@ -1,58 +1,65 @@
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("PegaTudo instalado.");
+// PegaTudo - Background Service Worker
+
+// Armazena as mídias encontradas por ID de aba
+const mediaByTab = {};
+
+// Limpa o armazenamento de mídia quando uma aba é fechada
+chrome.tabs.onRemoved.addListener((tabId) => {
+  if (mediaByTab[tabId]) {
+    delete mediaByTab[tabId];
+  }
 });
 
+// Limpa o armazenamento de mídia quando o usuário navega para uma nova página na mesma aba
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.status === 'loading') {
+    if (mediaByTab[tabId]) {
+      delete mediaByTab[tabId];
+    }
+  }
+});
+
+// Listener principal de mensagens
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === "download") {
-        handleStreamDownload(message, sender.tab.id);
-        sendResponse({ success: true });
-    }
-    return true;
+  const tabId = sender.tab?.id;
+
+  switch (message.action) {
+    // Mensagem do content script quando uma nova mídia é descoberta
+    case 'mediaDiscovered':
+      if (tabId) {
+        if (!mediaByTab[tabId]) {
+          mediaByTab[tabId] = [];
+        }
+        // Evita adicionar URLs duplicadas
+        if (!mediaByTab[tabId].some(item => item.url === message.media.url)) {
+          mediaByTab[tabId].push(message.media);
+        }
+      }
+      break;
+
+    // Mensagem da popup para obter a lista de mídias da aba atual
+    case 'getMediaList':
+      if (tabId) {
+        sendResponse(mediaByTab[tabId] || []);
+      }
+      return true; // Necessário para sendResponse assíncrono
+
+    // Mensagem para iniciar um download
+    case 'download':
+      chrome.downloads.download({
+        url: message.url,
+        filename: message.filename,
+        conflictAction: 'uniquify'
+      }, (downloadId) => {
+        if (chrome.runtime.lastError) {
+          console.error('Download failed:', chrome.runtime.lastError);
+        }
+      });
+      break;
+  }
+  
+  // Retorna true para indicar que a resposta pode ser assíncrona
+  return true;
 });
 
-async function handleStreamDownload({ url, filename }, tabId) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const contentLength = response.headers.get('content-length');
-        const total = parseInt(contentLength, 10);
-        let receivedLength = 0;
-
-        const reader = response.body.getReader();
-        const chunks = [];
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-                break;
-            }
-            chunks.push(value);
-            receivedLength += value.length;
-
-            if (contentLength) {
-                const progress = Math.round((receivedLength / total) * 100);
-                chrome.tabs.sendMessage(tabId, { action: 'downloadProgress', progress, filename });
-            }
-        }
-
-        const blob = new Blob(chunks);
-        const downloadUrl = URL.createObjectURL(blob);
-
-        chrome.downloads.download({
-            url: downloadUrl,
-            filename: filename,
-            conflictAction: 'uniquify'
-        }, (downloadId) => {
-            URL.revokeObjectURL(downloadUrl);
-            if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError);
-            }
-        });
-
-    } catch (error) {
-        console.error(error);
-    }
-}
+console.log("PegaTudo Service Worker iniciado.");

@@ -19,7 +19,7 @@
     {
       "matches": ["<all_urls>"],
       "js": ["src/js/utils.js", "src/js/interceptor.js", "src/js/content.js"],
-      "css": ["src/css/popup.css"],
+      "css": ["src/css/popup.css", "src/css/features/toast.css"],
       "run_at": "document_start"
     }
   ],

@@ -3,34 +3,34 @@
 <head>
   <title>PegaTudo</title>
   <link rel="stylesheet" href="src/css/popup.css">
+  <link rel="stylesheet" href="src/css/features/media-list.css">
 </head>
 <body>
   <div class="container">
-    <img src="icons/icon128.png" alt="PegaTudo Logo" class="logo">
-    <h1>PegaTudo</h1>
-    <p>Passe o mouse sobre vídeos ou imagens em qualquer site para ver o botão de download.</p>
-    
-    <div class="toggle-section">
+    <div class="header">
+      <img src="icons/icon48.png" alt="PegaTudo Logo" class="logo">
+      <h1>PegaTudo</h1>
       <label class="toggle-switch">
         <input type="checkbox" id="extensionToggle" checked>
         <span class="slider"></span>
       </label>
-      <span id="toggleStatus">Ativado</span>
     </div>
 
-    <div class="control-panel">
-        <h2>Painel de Controle</h2>
-        <div class="toggle-section">
-            <label class="toggle-switch">
-                <input type="checkbox" id="debugModeToggle">
-                <span class="slider"></span>
-            </label>
-            <span>Modo de Depuração</span>
-        </div>
+    <div class="controls">
+      <button id="downloadAllBtn">Baixar Todos</button>
+      <button id="settingsBtn">⚙️</button>
+    </div>
+
+    <div id="mediaList">
+      <!-- Itens de mídia serão injetados aqui pelo popup.js -->
     </div>
     
-    <button id="openDownloads">Ver Downloads</button>
+    <div id="placeholder" class="placeholder-text">
+      Nenhuma mídia encontrada nesta página. Navegue para uma página com vídeos ou imagens.
+    </div>
+
   </div>
+  <script src="src/js/utils.js"></script>
   <script src="src/js/popup.js"></script>
 </body>
 </html>
