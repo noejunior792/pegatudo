@@ -12,9 +12,16 @@ window.fetch = function(...args) {
       // It's crucial to clone the response, as the body can only be read once.
       const clone = response.clone();
       const contentType = clone.headers.get('Content-Type') || '';
+      const url = args[0] instanceof Request ? args[0].url : args[0];
       
-      if (contentType.match(/video|image|audio/)) {
-        const url = args[0] instanceof Request ? args[0].url : args[0];
+      // Detecta manifestos de HLS/DASH pela extensão ou pelo content-type
+      if (url.includes('.m3u8') || contentType.includes('application/vnd.apple.mpegurl')) {
+        window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url, type: 'hls' } }));
+      } else if (url.includes('.mpd') || contentType.includes('application/dash+xml')) {
+        window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url, type: 'dash' } }));
+      } 
+      // Detecta outras mídias
+      else if (contentType.match(/video|image|audio/)) {
         window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url, type: 'fetch' } }));
       }
     } catch (e) {

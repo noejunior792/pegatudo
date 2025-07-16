@@ -63,3 +63,11 @@
 .media-actions button:hover img {
     opacity: 1;
 }
+
+.media-info .media-type.stream {
+  font-weight: bold;
+  color: #c0392b; /* Um tom de vermelho para destacar */
+  background-color: #f9e7e7;
+  padding: 2px 5px;
+  border-radius: 3px;
+}

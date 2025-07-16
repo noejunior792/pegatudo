@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const extensionToggle = document.getElementById('extensionToggle');
   const settingsBtn = document.getElementById('settingsBtn');
 
-  let currentMediaItems = []; // Armazena a lista de mídias atual
+  let currentMediaItems = [];
 
   // Listener para o botão de configurações
   settingsBtn.addEventListener('click', () => {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function renderMediaList(mediaItems) {
-    mediaListElement.innerHTML = ''; // Limpa a lista
+    mediaListElement.innerHTML = '';
     mediaItems.forEach(item => {
       const mediaItemElement = createMediaItemElement(item);
       mediaListElement.appendChild(mediaItemElement);
@@ -63,13 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const div = document.createElement('div');
     div.className = 'media-item';
     const fileType = getFileType(item.url);
+    const isStream = item.type === 'hls' || item.type === 'dash';
     const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(fileType);
 
     div.innerHTML = `
       <img src="${isImage ? item.url : 'icons/icon48.png'}" class="thumbnail" alt="thumbnail" loading="lazy">
       <div class="media-info">
         <span class="media-url">${getFileName(item.url)}</span>
-        <span class="media-type">${fileType.toUpperCase()} - ${item.type}</span>
+        <span class="media-type ${isStream ? 'stream' : ''}">${item.type.toUpperCase()}</span>
       </div>
       <div class="media-actions">
         <button class="download-btn" title="Baixar">
@@ -78,8 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    div.querySelector('.download-btn').addEventListener('click', () => {
-      downloadSingleItem(item);
+    div.querySelector('.download-btn').addEventListener('click', (e) => {
+      const button = e.currentTarget;
+      button.disabled = true; // Desabilita o botão para evitar cliques duplos
+      if (isStream) {
+        downloadStream(item);
+      } else {
+        downloadSingleItem(item);
+        setTimeout(() => button.disabled = false, 2000); // Reabilita após um tempo
+      }
     });
 
     return div;
@@ -94,24 +102,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Listener para o botão "Baixar Todos"
+  function downloadStream(item) {
+    showToast(`Iniciando download do stream...`);
+    chrome.runtime.sendMessage({
+      action: 'downloadHls', // Por enquanto, só HLS é suportado
+      url: item.url,
+      filename: getFileName(item.url).replace('.m3u8', '')
+    });
+  }
+
+  // Listener para o botão "Baixar Todos" (ignora streams por enquanto)
   downloadAllBtn.addEventListener('click', () => {
-    if (currentMediaItems.length === 0) {
-      showToast('Nenhuma mídia para baixar.', 2000);
+    const downloadableItems = currentMediaItems.filter(item => item.type !== 'hls' && item.type !== 'dash');
+    if (downloadableItems.length === 0) {
+      showToast('Nenhuma mídia direta para baixar.', 2000);
       return;
     }
 
-    showToast(`Iniciando download de ${currentMediaItems.length} arquivos...`);
-    
-    // Baixa todos os itens com um pequeno intervalo
-    currentMediaItems.forEach((item, index) => {
+    showToast(`Iniciando download de ${downloadableItems.length} arquivos...`);
+    downloadableItems.forEach((item, index) => {
       setTimeout(() => {
-        chrome.runtime.sendMessage({
-          action: 'download',
-          url: item.url,
-          filename: getFileName(item.url)
-        });
-      }, index * 300); // 300ms de intervalo para não sobrecarregar
+        downloadSingleItem(item);
+      }, index * 300);
     });
+  });
+
+  // Listener para o progresso do HLS
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.action === 'hlsProgress') {
+      showToast(message.message, 2500);
+    }
   });
 });

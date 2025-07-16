@@ -1,4 +1,5 @@
 // PegaTudo - Background Service Worker
+importScripts('./services/hls-downloader.js');
 
 // Armazena as mídias encontradas por ID de aba
 const mediaByTab = {};
@@ -24,27 +25,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const tabId = sender.tab?.id;
 
   switch (message.action) {
-    // Mensagem do content script quando uma nova mídia é descoberta
     case 'mediaDiscovered':
       if (tabId) {
         if (!mediaByTab[tabId]) {
           mediaByTab[tabId] = [];
         }
-        // Evita adicionar URLs duplicadas
         if (!mediaByTab[tabId].some(item => item.url === message.media.url)) {
           mediaByTab[tabId].push(message.media);
         }
       }
       break;
 
-    // Mensagem da popup para obter a lista de mídias da aba atual
     case 'getMediaList':
       if (tabId) {
         sendResponse(mediaByTab[tabId] || []);
       }
-      return true; // Necessário para sendResponse assíncrono
+      return true;
 
-    // Mensagem para iniciar um download
     case 'download':
       chrome.downloads.download({
         url: message.url,
@@ -56,9 +53,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
       });
       break;
+
+    case 'downloadHls':
+      if (tabId) {
+        downloadHls(message.url, message.filename, tabId);
+      }
+      break;
+    
+    // Repassa a mensagem de progresso para a popup correta
+    case 'hlsProgress':
+      chrome.tabs.sendMessage(message.tabId, { 
+        action: 'hlsProgress', 
+        message: message.message 
+      });
+      break;
   }
   
-  // Retorna true para indicar que a resposta pode ser assíncrona
   return true;
 });
 
