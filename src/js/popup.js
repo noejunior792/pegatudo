@@ -5,8 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const placeholderElement = document.getElementById('placeholder');
   const downloadAllBtn = document.getElementById('downloadAllBtn');
   const extensionToggle = document.getElementById('extensionToggle');
+  const settingsBtn = document.getElementById('settingsBtn');
 
   let currentMediaItems = []; // Armazena a lista de mídias atual
+
+  // Listener para o botão de configurações
+  settingsBtn.addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
+  });
 
   // Carrega o estado do toggle
   chrome.storage.sync.get('extensionEnabled', (result) => {

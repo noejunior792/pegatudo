@@ -31,6 +31,7 @@
   "action": {
     "default_popup": "popup.html"
   },
+  "options_page": "src/html/settings.html",
   "web_accessible_resources": [
     {
       "resources": ["icons/icon128.png"],

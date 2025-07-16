@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PegaTudo - Configurações</title>
+  <link rel="stylesheet" href="src/css/settings.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="icons/icon48.png" alt="Logo">
+      <h1>Configurações</h1>
+    </div>
+
+    <div class="settings-content">
+      <div class="setting-item">
+        <label for="inPageButtonsToggle">Mostrar botões de download na página</label>
+        <p class="description">Ative para ver os botões de "Baixar" diretamente sobre as imagens e vídeos.</p>
+        <label class="toggle-switch">
+          <input type="checkbox" id="inPageButtonsToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <label for="filenamePattern">Padrão de nome de arquivo (Em breve)</label>
+        <p class="description">Personalize como os arquivos são nomeados. Ex: {site}-{nome}-{data}</p>
+        <input type="text" id="filenamePattern" placeholder="{nome_original}" disabled>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button id="saveBtn">Salvar e Fechar</button>
+      <div id="status" class="status-message"></div>
+    </div>
+  </div>
+  <script src="src/js/settings.js"></script>
+</body>
+</html>
