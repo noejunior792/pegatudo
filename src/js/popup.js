@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadAllBtn = document.getElementById('downloadAllBtn');
   const extensionToggle = document.getElementById('extensionToggle');
 
+  let currentMediaItems = []; // Armazena a lista de mídias atual
+
   // Carrega o estado do toggle
   chrome.storage.sync.get('extensionEnabled', (result) => {
     extensionToggle.checked = result.extensionEnabled !== false;
@@ -15,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   extensionToggle.addEventListener('change', (e) => {
     const isEnabled = e.target.checked;
     chrome.storage.sync.set({ extensionEnabled: isEnabled });
-    // Envia mensagem para o content script para ativar/desativar em tempo real
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
         chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleExtension', enabled: isEnabled });
@@ -31,13 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    if (mediaItems && mediaItems.length > 0) {
+    currentMediaItems = mediaItems || [];
+    if (currentMediaItems.length > 0) {
       placeholderElement.style.display = 'none';
       mediaListElement.style.display = 'block';
-      renderMediaList(mediaItems);
+      downloadAllBtn.disabled = false;
+      renderMediaList(currentMediaItems);
     } else {
       placeholderElement.style.display = 'block';
       mediaListElement.style.display = 'none';
+      downloadAllBtn.disabled = true;
     }
   });
 
@@ -52,12 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function createMediaItemElement(item) {
     const div = document.createElement('div');
     div.className = 'media-item';
-
     const fileType = getFileType(item.url);
     const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(fileType);
 
     div.innerHTML = `
-      <img src="${isImage ? item.url : 'icons/icon48.png'}" class="thumbnail" alt="thumbnail">
+      <img src="${isImage ? item.url : 'icons/icon48.png'}" class="thumbnail" alt="thumbnail" loading="lazy">
       <div class="media-info">
         <span class="media-url">${getFileName(item.url)}</span>
         <span class="media-type">${fileType.toUpperCase()} - ${item.type}</span>
@@ -70,19 +73,39 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     div.querySelector('.download-btn').addEventListener('click', () => {
-      chrome.runtime.sendMessage({
-        action: 'download',
-        url: item.url,
-        filename: getFileName(item.url)
-      });
+      downloadSingleItem(item);
     });
 
     return div;
   }
 
+  function downloadSingleItem(item) {
+    showToast(`Baixando: ${getFileName(item.url)}`);
+    chrome.runtime.sendMessage({
+      action: 'download',
+      url: item.url,
+      filename: getFileName(item.url)
+    });
+  }
+
   // Listener para o botão "Baixar Todos"
   downloadAllBtn.addEventListener('click', () => {
-    // Futura implementação
-    alert('Funcionalidade "Baixar Todos" será implementada em breve!');
+    if (currentMediaItems.length === 0) {
+      showToast('Nenhuma mídia para baixar.', 2000);
+      return;
+    }
+
+    showToast(`Iniciando download de ${currentMediaItems.length} arquivos...`);
+    
+    // Baixa todos os itens com um pequeno intervalo
+    currentMediaItems.forEach((item, index) => {
+      setTimeout(() => {
+        chrome.runtime.sendMessage({
+          action: 'download',
+          url: item.url,
+          filename: getFileName(item.url)
+        });
+      }, index * 300); // 300ms de intervalo para não sobrecarregar
+    });
   });
 });

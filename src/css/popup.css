@@ -1,77 +1,88 @@
+/* Geral */
 body {
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #e9f0f5; /* Light blue-gray background */
+  background-color: #f4f6f8;
   margin: 0;
-  width: 280px;
+  width: 320px; /* Um pouco mais largo para a nova UI */
   color: #333;
 }
 
 .container {
-  padding: 25px;
+  padding: 15px;
   text-align: center;
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-  width: 90px;
-  height: 90px;
+/* Cabeçalho */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 15px;
 }
 
-h1 {
-  font-size: 24px;
-  color: #2c3e50; /* Darker blue for heading */
-  margin: 0 0 10px;
+.header .logo {
+  width: 32px;
+  height: 32px;
+}
+
+.header h1 {
+  font-size: 20px;
+  color: #2c3e50;
+  margin: 0;
   font-weight: 600;
 }
 
-p {
-  font-size: 15px;
-  color: #555; /* Slightly softer text color */
-  margin-bottom: 25px;
-  line-height: 1.5;
+/* Controles */
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-#openDownloads {
-  background-color: #4CAF50; /* Green for action button */
+.controls button {
+  flex-grow: 1;
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  font-size: 17px;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-#openDownloads:hover {
-  background-color: #45a049;
-  transform: translateY(-2px);
+.controls button:hover {
+  background-color: #0056b3;
 }
 
-#openDownloads:active {
-  transform: translateY(0);
+.controls button#settingsBtn {
+  flex-grow: 0;
+  padding: 0 12px;
+  font-size: 18px;
 }
 
-.toggle-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
+.controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
+/* Placeholder para quando não há mídias */
+.placeholder-text {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  display: none; /* Escondido por padrão */
+}
+
+/* Toggle Switch */
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 25px;
+  width: 44px;
+  height: 22px;
 }
 
 .toggle-switch input {
@@ -89,14 +100,14 @@ p {
   bottom: 0;
   background-color: #ccc;
   transition: .4s;
-  border-radius: 25px;
+  border-radius: 22px;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 19px;
-  width: 19px;
+  height: 16px;
+  width: 16px;
   left: 3px;
   bottom: 3px;
   background-color: white;
@@ -109,89 +120,5 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(25px);
-}
-
-#toggleStatus {
-  font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.pega-tudo-container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 9999;
-}
-
-.pega-tudo-download-button {
-  background-color: rgba(66, 133, 244, 0.9); /* Google Blue */
-  color: white;
-  border: none;
-  padding: 9px 18px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s, opacity 0.2s, transform 0.2s;
-  opacity: 0.9;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-.pega-tudo-download-button:hover {
-  background-color: #3c82f0;
-  opacity: 1;
-  transform: translateY(-1px);
-}
-
-.pega-tudo-download-button:active {
-  transform: translateY(0);
-}
-
-.pega-tudo-download-button:disabled {
-  background-color: #cccccc; /* Lighter gray for disabled */
-  cursor: not-allowed;
-  opacity: 0.6;
-  box-shadow: none;
-}
-
-.pega-tudo-container {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2147483647;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-}
-
-.pega-tudo-download-button {
-    all: unset;
-    background-color: #007bff;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: background-color 0.3s;
-}
-
-.pega-tudo-download-button:hover {
-    background-color: #0056b3;
-}
-
-.pega-tudo-download-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-.control-panel {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #e0e0e0;
-}
-
-.control-panel h2 {
-    font-size: 18px;
-    color: #2c3e50;
-    margin-bottom: 15px;
+  transform: translateX(22px);
 }
