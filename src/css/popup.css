@@ -1,19 +1,22 @@
-/* Geral */
+/* General Styles */
 body {
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: #f4f6f8;
   margin: 0;
-  width: 320px; /* Um pouco mais largo para a nova UI */
+  width: 400px; /* Wider for better multi-selection UI */
   color: #333;
+  font-size: 14px;
 }
 
 .container {
   padding: 15px;
   text-align: center;
   background-color: #ffffff;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
-/* Cabeçalho */
+/* Header */
 .header {
   display: flex;
   align-items: center;
@@ -33,48 +36,245 @@ body {
   font-weight: 600;
 }
 
-/* Controles */
+/* Controls */
 .controls {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 15px;
+  flex-wrap: wrap;
 }
 
 .controls button {
-  flex-grow: 1;
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 8px 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
+  white-space: nowrap;
 }
 
-.controls button:hover {
+.controls button:hover:not(:disabled) {
   background-color: #0056b3;
-}
-
-.controls button#settingsBtn {
-  flex-grow: 0;
-  padding: 0 12px;
-  font-size: 18px;
+  transform: translateY(-1px);
 }
 
 .controls button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
   opacity: 0.7;
+  transform: none;
 }
 
-/* Placeholder para quando não há mídias */
+#downloadAllBtn {
+  flex: 1;
+}
+
+#downloadSelectedBtn {
+  flex: 1;
+  background-color: #28a745;
+}
+
+#downloadSelectedBtn:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+#selectAllBtn {
+  background-color: #6c757d;
+}
+
+#selectAllBtn:hover:not(:disabled) {
+  background-color: #545b62;
+}
+
+#refreshBtn, #settingsBtn {
+  min-width: 36px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* Status Bar */
+.status-bar {
+  margin-bottom: 10px;
+  padding: 5px 0;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+/* Media Categories */
+.media-category {
+  margin-bottom: 20px;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.category-header {
+  background-color: #f8f9fa;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.category-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.category-select-all {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.category-select-all:hover {
+  background-color: #545b62;
+}
+
+.category-items {
+  padding: 0;
+}
+
+/* Media Items */
+.media-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f1f3f4;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.media-item:last-child {
+  border-bottom: none;
+}
+
+.media-item:hover {
+  background-color: #f8f9fa;
+}
+
+.media-item.selected {
+  background-color: #e3f2fd;
+  border-left: 3px solid #2196f3;
+}
+
+.media-item-select {
+  margin-right: 10px;
+}
+
+.media-checkbox {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.media-thumbnail {
+  position: relative;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.media-thumbnail img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #f1f3f4;
+}
+
+.stream-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 8px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.media-info {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+}
+
+.media-filename {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.media-metadata {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: #6c757d;
+}
+
+.media-type {
+  background-color: #007bff;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.media-mime, .media-size, .media-source {
+  background-color: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #e9ecef;
+}
+
+.media-actions {
+  margin-left: 10px;
+}
+
+.download-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+.download-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Placeholder */
 .placeholder-text {
-  padding: 20px;
+  padding: 40px 20px;
   text-align: center;
   color: #888;
   font-size: 14px;
-  display: none; /* Escondido por padrão */
+  line-height: 1.5;
+  display: none;
 }
 
 /* Toggle Switch */
@@ -121,4 +321,23 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(22px);
+}
+
+/* Scrollbar styling for webkit browsers */
+.container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }

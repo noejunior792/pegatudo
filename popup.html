@@ -18,11 +18,18 @@
 
     <div class="controls">
       <button id="downloadAllBtn">Baixar Todos</button>
-      <button id="settingsBtn">⚙️</button>
+      <button id="downloadSelectedBtn" disabled>Baixar Selecionados</button>
+      <button id="selectAllBtn" disabled>Selecionar Todos</button>
+      <button id="refreshBtn" title="Atualizar lista">🔄</button>
+      <button id="settingsBtn" title="Configurações">⚙️</button>
+    </div>
+
+    <div class="status-bar">
+      <span id="mediaCount"></span>
     </div>
 
     <div id="mediaList">
-      <!-- Itens de mídia serão injetados aqui pelo popup.js -->
+      <!-- Media items will be injected here by popup.js -->
     </div>
     
     <div id="placeholder" class="placeholder-text">

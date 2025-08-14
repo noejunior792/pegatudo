@@ -12,6 +12,8 @@
     </div>
 
     <div class="settings-list">
+      
+      <!-- Debug Mode -->
       <div class="setting-item">
         <div class="setting-info">
           <h2>Modo de Depuração</h2>
@@ -24,10 +26,105 @@
           </label>
         </div>
       </div>
-      
-      <!-- Futuras configurações aparecerão aqui -->
+
+      <!-- Auto Download -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <h2>Download Automático</h2>
+          <p>Baixa automaticamente mídias detectadas sem interação manual.</p>
+          <small>⚠️ Use com cuidado - pode baixar muitos arquivos!</small>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="autoDownloadToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Custom Naming -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <h2>Nomes Personalizados</h2>
+          <p>Personaliza o padrão de nomenclatura dos arquivos baixados.</p>
+          <div class="custom-naming-settings">
+            <input 
+              type="text" 
+              id="customNamingPattern" 
+              placeholder="{filename}_{timestamp}"
+              title="Use {filename}, {timestamp}, {date}, {time}, {type}"
+            >
+            <div id="customNamingHelp" class="help-text">
+              Disponível: {filename}, {timestamp}, {date}, {time}, {type}
+            </div>
+          </div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="customNamingToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Download Concurrency -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <h2>Downloads Simultâneos</h2>
+          <p>Número máximo de downloads executados ao mesmo tempo.</p>
+        </div>
+        <div class="setting-control">
+          <select id="maxConcurrentDownloads">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Auto Refresh -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <h2>Atualização Automática</h2>
+          <p>Atualiza automaticamente a lista de mídias na popup a cada 3 segundos.</p>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="autoRefreshToggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- DOM Detection -->
+      <div class="setting-item">
+        <div class="setting-info">
+          <h2>Detecção no DOM</h2>
+          <p>Detecta mídias diretamente nos elementos HTML da página (além da interceptação de rede).</p>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="domDetectionToggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
 
     </div>
+
+    <!-- Action Buttons -->
+    <div class="settings-actions">
+      <button id="saveSettings" class="btn btn-primary">Salvar Configurações</button>
+      <button id="resetSettings" class="btn btn-secondary">Restaurar Padrão</button>
+    </div>
+
+    <!-- Settings Info -->
+    <div class="settings-info">
+      <p id="settingsInfo">Configuração padrão ativa</p>
+    </div>
+
   </div>
   <script src="../js/services/settings.js"></script>
 </body>
