@@ -1,51 +1,111 @@
-// Intercept network requests to find media files.
-// This script is injected into the page context.
+// PegaTudo - Safe Network Interceptor
+// This script carefully intercepts network requests without breaking host pages
 
-const originalFetch = window.fetch;
-window.fetch = function(...args) {
-  // Execute the original fetch and get the promise
-  const requestPromise = originalFetch.apply(this, args);
+(function() {
+  'use strict';
+  
+  // Check if PegaTudo is already initialized to prevent conflicts
+  if (window.pegaTudoInitialized) {
+    return;
+  }
+  window.pegaTudoInitialized = true;
 
-  // Attach a non-blocking listener to the promise
-  requestPromise.then(response => {
+  // Store original functions to ensure we can restore them if needed
+  const originalFetch = window.fetch;
+  const originalXhrOpen = window.XMLHttpRequest.prototype.open;
+  const originalXhrSend = window.XMLHttpRequest.prototype.send;
+
+  // Safe event dispatcher that won't interfere with page functionality
+  function safeDispatchMediaEvent(url, type, additional = {}) {
     try {
-      // It's crucial to clone the response, as the body can only be read once.
-      const clone = response.clone();
-      const contentType = clone.headers.get('Content-Type') || '';
-      const url = args[0] instanceof Request ? args[0].url : args[0];
-      
-      // Detecta manifestos de HLS/DASH pela extensão ou pelo content-type
-      if (url.includes('.m3u8') || contentType.includes('application/vnd.apple.mpegurl')) {
-        window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url, type: 'hls' } }));
-      } else if (url.includes('.mpd') || contentType.includes('application/dash+xml')) {
-        window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url, type: 'dash' } }));
-      } 
-      // Detecta outras mídias
-      else if (contentType.match(/video|image|audio/)) {
-        window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url, type: 'fetch' } }));
-      }
+      window.dispatchEvent(new CustomEvent('pegaTudoMediaDiscovered', { 
+        detail: { url, type, ...additional }
+      }));
     } catch (e) {
-      // Silently catch errors to avoid breaking the host page
+      // Silently fail to prevent breaking the host page
+      console.debug('PegaTudo: Safe event dispatch failed', e);
     }
-  }).catch(() => {
-    // Also catch potential promise rejections silently
-  });
+  }
 
-  // Return the original, untouched promise immediately
-  return requestPromise;
-};
+  // Enhanced fetch interceptor with better error handling
+  window.fetch = function(...args) {
+    const requestPromise = originalFetch.apply(this, args);
 
-const originalXhrOpen = window.XMLHttpRequest.prototype.open;
-window.XMLHttpRequest.prototype.open = function(...args) {
-    this.addEventListener('load', () => {
-        try {
-            const contentType = this.getResponseHeader('Content-Type') || '';
-            if (this.responseURL && contentType.match(/video|image|audio/)) {
-                window.dispatchEvent(new CustomEvent('mediaDiscovered', { detail: { url: this.responseURL, type: 'xhr' } }));
-            }
-        } catch (e) {
-            // Silently catch errors to avoid breaking the host page
+    // Non-blocking promise handler
+    requestPromise.then(response => {
+      try {
+        if (!response.ok) return; // Skip failed requests
+        
+        const clone = response.clone();
+        const contentType = clone.headers.get('Content-Type') || '';
+        const url = args[0] instanceof Request ? args[0].url : args[0];
+        
+        // Skip very short URLs or data URLs to avoid noise
+        if (!url || url.length < 10 || url.startsWith('data:')) return;
+        
+        // Enhanced media type detection
+        if (url.includes('.m3u8') || contentType.includes('application/vnd.apple.mpegurl') || contentType.includes('application/x-mpegURL')) {
+          safeDispatchMediaEvent(url, 'hls');
+        } else if (url.includes('.mpd') || contentType.includes('application/dash+xml')) {
+          safeDispatchMediaEvent(url, 'dash');
+        } else if (contentType.match(/^video\//)) {
+          safeDispatchMediaEvent(url, 'video', { mimeType: contentType });
+        } else if (contentType.match(/^image\//)) {
+          safeDispatchMediaEvent(url, 'image', { mimeType: contentType });
+        } else if (contentType.match(/^audio\//)) {
+          safeDispatchMediaEvent(url, 'audio', { mimeType: contentType });
         }
+      } catch (e) {
+        // Silent error handling to prevent page breakage
+      }
+    }).catch(() => {
+      // Silent error handling for failed requests
     });
-    return originalXhrOpen.apply(this, args);
-};
+
+    return requestPromise;
+  };
+
+  // Enhanced XMLHttpRequest interceptor
+  window.XMLHttpRequest.prototype.open = function(...args) {
+    const result = originalXhrOpen.apply(this, args);
+    
+    // Add load listener safely
+    const originalAddEventListener = this.addEventListener;
+    if (originalAddEventListener) {
+      this.addEventListener('load', function() {
+        try {
+          if (this.status >= 200 && this.status < 300 && this.responseURL) {
+            const contentType = this.getResponseHeader('Content-Type') || '';
+            
+            if (contentType.match(/video|image|audio/) || 
+                this.responseURL.match(/\.(mp4|webm|mp3|wav|jpg|jpeg|png|gif)(\?|$)/i)) {
+              safeDispatchMediaEvent(this.responseURL, 'xhr', { mimeType: contentType });
+            }
+          }
+        } catch (e) {
+          // Silent error handling
+        }
+      });
+    }
+    
+    return result;
+  };
+
+  // Enhanced blob URL detection
+  const originalCreateObjectURL = URL.createObjectURL;
+  URL.createObjectURL = function(blob) {
+    const url = originalCreateObjectURL.apply(this, arguments);
+    
+    // Detect blob URLs that might contain media
+    if (blob && blob.type && blob.type.match(/video|image|audio/)) {
+      safeDispatchMediaEvent(url, 'blob', { 
+        mimeType: blob.type,
+        size: blob.size 
+      });
+    }
+    
+    return url;
+  };
+
+  console.debug('PegaTudo: Safe interceptor initialized');
+})();

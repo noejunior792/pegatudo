@@ -1,24 +1,30 @@
-/* Estilos para a lista de mídias na popup */
+/* Enhanced Media List Styles */
 #mediaList {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
-    margin-top: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
 }
 
-.media-item {
+/* These styles are now mainly in popup.css but keeping for compatibility */
+.media-item-legacy {
     display: flex;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
 }
 
-.media-item:last-child {
+.media-item-legacy:last-child {
     border-bottom: none;
 }
 
-.media-item img.thumbnail {
+.media-item-legacy:hover {
+    background-color: #f8f9fa;
+}
+
+.media-item-legacy img.thumbnail {
     width: 60px;
     height: 40px;
     object-fit: cover;
@@ -27,7 +33,7 @@
     background-color: #f0f0f0;
 }
 
-.media-info {
+.media-info-legacy {
     flex-grow: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -35,39 +41,84 @@
     font-size: 13px;
 }
 
-.media-info .media-url {
+.media-info-legacy .media-url {
     color: #555;
     display: block;
 }
 
-.media-info .media-type {
+.media-info-legacy .media-type {
     font-size: 11px;
     color: #888;
     text-transform: uppercase;
 }
 
-.media-actions button {
+.media-actions-legacy button {
     all: unset;
     cursor: pointer;
     margin-left: 8px;
     padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
 }
 
-.media-actions button img {
+.media-actions-legacy button:hover {
+    background-color: #e9ecef;
+}
+
+.media-actions-legacy button img {
     width: 16px;
     height: 16px;
     opacity: 0.7;
     transition: opacity 0.2s;
 }
 
-.media-actions button:hover img {
+.media-actions-legacy button:hover img {
     opacity: 1;
 }
 
-.media-info .media-type.stream {
-  font-weight: bold;
-  color: #c0392b; /* Um tom de vermelho para destacar */
-  background-color: #f9e7e7;
-  padding: 2px 5px;
-  border-radius: 3px;
+.media-info-legacy .media-type.stream {
+    font-weight: bold;
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+/* Loading animation */
+.media-list-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #6c757d;
+}
+
+.media-list-loading::after {
+    content: "...";
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% {
+        color: rgba(0,0,0,0);
+        text-shadow:
+            .25em 0 0 rgba(0,0,0,0),
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    40% {
+        color: #6c757d;
+        text-shadow:
+            .25em 0 0 rgba(0,0,0,0),
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    60% {
+        text-shadow:
+            .25em 0 0 #6c757d,
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    80%, 100% {
+        text-shadow:
+            .25em 0 0 #6c757d,
+            .5em 0 0 #6c757d;
+    }
 }
