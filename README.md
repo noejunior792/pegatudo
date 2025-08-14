@@ -1,16 +1,40 @@
-# PegaTudo
+# PegaTudo - Advanced Video Downloader
 
-O PegaTudo é uma extensão para Chrome que transforma a maneira como você baixa conteúdo da web. Com um painel de mídia centralizado, ele detecta e lista todos os vídeos, imagens e áudios de uma página, permitindo que você baixe o que quiser com um único clique.
+PegaTudo is a cutting-edge Chrome extension that revolutionizes how you download media content from the web. Featuring an advanced video detection engine with encryption support, streaming protocol handling, and AI-powered extraction algorithms.
 
-## ✨ Funcionalidades
+## 🚀 Advanced Features
 
-*   **Painel de Mídia Centralizado:** Todas as mídias detectadas na página são listadas de forma organizada na popup da extensão.
-*   **Downloads Universais:** Baixe vídeos, imagens e áudios com facilidade.
-*   **Suporte a Streaming HLS:** Baixa vídeos de streams HLS (`.m3u8`), juntando todos os segmentos em um único arquivo.
-*   **Baixar Todos:** Baixe todas as mídias diretas (não-stream) da página com um único botão.
-*   **Detecção Inteligente:** Intercepta o tráfego da página para encontrar mídias carregadas dinamicamente.
-*   **Notificações de Progresso:** Acompanhe o andamento dos downloads de stream através de notificações.
-*   **Página de Configurações:** Personalize o comportamento da extensão, como ativar o modo de depuração.
+### 🎯 Intelligent Detection Engine
+*   **Multi-Protocol Support:** Advanced HLS (.m3u8), DASH (.mpd), and adaptive bitrate streaming
+*   **Encryption Handling:** AES-128, SAMPLE-AES decryption with automatic key extraction
+*   **Deep Network Analysis:** Intercepts fetch/XHR/WebSocket requests for comprehensive media discovery
+*   **Shadow DOM Scanning:** Detects hidden media in isolated DOM contexts
+*   **Pattern Recognition:** Advanced algorithms for identifying obfuscated media URLs
+
+### 🔒 Advanced Cryptography
+*   **Native Decryption:** Pure JavaScript AES implementation for encrypted streams
+*   **Key Derivation:** Mathematical algorithms for extracting encryption keys from manifests
+*   **Multi-Key Streams:** Handles complex encryption scenarios with key rotation
+*   **Segment Decryption:** Per-segment decryption with IV management
+
+### 🌐 Platform-Specific Extractors
+*   **YouTube:** Advanced extraction with quality selection and live stream support
+*   **Facebook:** Comprehensive video detection including React components
+*   **TikTok:** Multi-method extraction with music track separation
+*   **Generic:** Universal extractor for unknown platforms
+
+### 🎨 Professional UI
+*   **Shadow DOM Isolation:** Zero interference with target websites
+*   **Batch Downloads:** Select and download multiple files simultaneously
+*   **Quality Selection:** Choose from available formats and resolutions
+*   **Progress Tracking:** Real-time download progress with speed and ETA
+*   **Dark/Light Themes:** Modern, responsive interface
+
+### ⚡ Performance & Stealth
+*   **Concurrent Downloads:** Multi-threaded downloading with intelligent queuing
+*   **Request Randomization:** Mimics natural browser behavior to avoid detection
+*   **Rate Limiting:** Respects server resources and avoids triggering anti-bot measures
+*   **Memory Optimization:** Efficient handling of large files and streaming content
 
 ## 🛠️ Como Usar
 

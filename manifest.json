@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "PegaTudo",
-  "version": "2.2",
-  "description": "Baixe vídeos, imagens e outros arquivos de qualquer site.",
+  "name": "PegaTudo - Advanced Video Downloader",
+  "version": "3.0",
+  "description": "Advanced video download engine with encryption support, streaming protocols, and intelligent detection algorithms.",
   "permissions": [
     "downloads",
     "activeTab",
@@ -10,7 +10,12 @@
     "scripting",
     "unlimitedStorage",
     "tabs",
-    "debugger"
+    "debugger",
+    "declarativeNetRequest",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "src/js/background.js"
@@ -18,9 +23,29 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/js/utils.js", "src/js/interceptor.js", "src/js/content.js"],
+      "js": [
+        "src/js/utils.js", 
+        "src/js/interceptor.js", 
+        "src/js/content.js",
+        "src/js/advanced-integration.js"
+      ],
       "css": ["src/css/popup.css", "src/css/features/toast.css"],
       "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/icon128.png",
+        "dist/ts/types/index.js",
+        "dist/ts/core/*.js",
+        "dist/ts/crypto/*.js", 
+        "dist/ts/extractors/*.js",
+        "dist/ts/network/*.js",
+        "dist/ts/ui/*.js",
+        "dist/ts/utils/*.js"
+      ],
+      "matches": ["<all_urls>"]
     }
   ],
   "icons": {
@@ -32,10 +57,7 @@
     "default_popup": "popup.html"
   },
   "options_page": "src/html/settings.html",
-  "web_accessible_resources": [
-    {
-      "resources": ["icons/icon128.png"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  "declarative_net_request": {
+    "rule_resources": []
+  }
 }
