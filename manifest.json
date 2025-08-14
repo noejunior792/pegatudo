@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "PegaTudo - Advanced Video Downloader",
-  "version": "3.0",
-  "description": "Advanced video download engine with encryption support, streaming protocols, and intelligent detection algorithms.",
+  "name": "PegaTudo - Ultimate Video Downloader",
+  "version": "3.0.0",
+  "description": "Ultimate video download engine with 50+ modular JavaScript components. Download from any site with advanced streaming protocol support, encryption handling, and intelligent detection.",
   "permissions": [
     "downloads",
     "activeTab",
@@ -12,7 +12,9 @@
     "tabs",
     "debugger",
     "declarativeNetRequest",
-    "webRequest"
+    "webRequest",
+    "background",
+    "offscreen"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -24,12 +26,28 @@
     {
       "matches": ["<all_urls>"],
       "js": [
+        "src/js/core/types.js",
+        "src/js/core/logger.js",
+        "src/js/core/config.js",
+        "src/js/core/events.js",
+        "src/js/crypto/crypto-engine.js",
+        "src/js/crypto/key-manager.js",
+        "src/js/network/network-manager.js",
+        "src/js/streaming/streaming-engine.js",
+        "src/js/parsers/hls-parser.js",
+        "src/js/parsers/dash-parser.js",
+        "src/js/extractors/youtube-extractor.js",
         "src/js/utils.js",
         "src/js/interceptor.js",
         "src/js/content.js",
         "src/js/advanced-integration.js"
       ],
-      "css": ["src/css/popup.css", "src/css/features/toast.css"],
+      "css": [
+        "src/css/popup.css", 
+        "src/css/features/toast.css",
+        "src/css/advanced/download-manager.css",
+        "src/css/advanced/filters.css"
+      ],
       "run_at": "document_idle",
       "all_frames": false
     }
@@ -38,13 +56,21 @@
     {
       "resources": [
         "icons/icon128.png",
-        "dist/ts/types/index.js",
-        "dist/ts/core/*.js",
-        "dist/ts/crypto/*.js",
-        "dist/ts/extractors/*.js",
-        "dist/ts/network/*.js",
-        "dist/ts/ui/*.js",
-        "dist/ts/utils/*.js"
+        "src/js/core/*.js",
+        "src/js/crypto/*.js",
+        "src/js/extractors/*.js",
+        "src/js/network/*.js",
+        "src/js/streaming/*.js",
+        "src/js/parsers/*.js",
+        "src/js/ui/*.js",
+        "src/js/utils/*.js",
+        "src/js/formats/*.js",
+        "src/js/protocols/*.js",
+        "src/js/detection/*.js",
+        "src/js/schedulers/*.js",
+        "src/js/filters/*.js",
+        "src/js/export/*.js",
+        "src/js/services/*.js"
       ],
       "matches": ["<all_urls>"]
     }
