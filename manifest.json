@@ -12,8 +12,7 @@
     "tabs",
     "debugger",
     "declarativeNetRequest",
-    "webRequest",
- 
+    "webRequest"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -25,14 +24,12 @@
     {
       "matches": ["<all_urls>"],
       "js": [
-        "src/js/utils.js", 
-        "src/js/interceptor.js", 
+        "src/js/utils.js",
+        "src/js/interceptor.js",
         "src/js/content.js",
         "src/js/advanced-integration.js"
       ],
       "css": ["src/css/popup.css", "src/css/features/toast.css"],
-      "run_at": "document_start"
-      "js": ["src/js/utils.js", "src/js/interceptor.js", "src/js/content.js"],
       "run_at": "document_idle",
       "all_frames": false
     }
@@ -43,7 +40,7 @@
         "icons/icon128.png",
         "dist/ts/types/index.js",
         "dist/ts/core/*.js",
-        "dist/ts/crypto/*.js", 
+        "dist/ts/crypto/*.js",
         "dist/ts/extractors/*.js",
         "dist/ts/network/*.js",
         "dist/ts/ui/*.js",

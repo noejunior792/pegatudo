@@ -138,24 +138,25 @@ export class AdvancedCryptoEngine {
     }
     parseIV(ivString, length = 16) {
         if (!ivString) {
-            const iv = new Uint8Array(length);
-            return iv;
+            return new Uint8Array(length);
         }
         try {
             if (ivString.startsWith('0x') || ivString.startsWith('0X')) {
                 const hexIV = ivString.slice(2);
-                const iv = new Uint8Array(hexIV.length / 2);
+                const buffer = new ArrayBuffer(hexIV.length / 2);
+                const view = new Uint8Array(buffer);
                 for (let i = 0; i < hexIV.length; i += 2) {
-                    iv[i / 2] = parseInt(hexIV.substr(i, 2), 16);
+                    view[i / 2] = parseInt(hexIV.substr(i, 2), 16);
                 }
-                return iv;
+                return view;
             }
             const binaryString = atob(ivString);
-            const iv = new Uint8Array(binaryString.length);
+            const buffer = new ArrayBuffer(binaryString.length);
+            const view = new Uint8Array(buffer);
             for (let i = 0; i < binaryString.length; i++) {
-                iv[i] = binaryString.charCodeAt(i);
+                view[i] = binaryString.charCodeAt(i);
             }
-            return iv;
+            return view;
         }
         catch (error) {
             this.log(`Failed to parse IV: ${error}`, 'WARN');
