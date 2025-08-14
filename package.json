@@ -1,20 +1,26 @@
 {
   "name": "pegatudo",
-  "version": "2.2.0",
-  "description": "Advanced video download engine for browser extension",
+  "version": "3.0.0",
+  "description": "Advanced video download engine - Pure JavaScript implementation with 50+ modular components",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "lint": "eslint src/**/*.ts",
-    "dev": "tsc --watch"
+    "lint": "eslint src/**/*.js",
+    "test": "echo \"Pure JavaScript - No build required!\"",
+    "start": "echo \"Load extension directly from src/ directory\""
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.258",
-    "@types/node": "^20.10.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.0",
-    "@typescript-eslint/parser": "^6.13.0",
-    "eslint": "^8.54.0",
-    "typescript": "^5.3.0"
+    "eslint": "^8.54.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "keywords": [
+    "video-downloader",
+    "browser-extension",
+    "streaming",
+    "hls",
+    "dash",
+    "youtube",
+    "javascript",
+    "modular"
+  ],
+  "author": "PegaTudo Team",
+  "license": "MIT"
 }
