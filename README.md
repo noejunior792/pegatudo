@@ -1,3 +1,42 @@
+
+# PegaTudo - Advanced Video Downloader
+
+PegaTudo is a cutting-edge Chrome extension that revolutionizes how you download media content from the web. Featuring an advanced video detection engine with encryption support, streaming protocol handling, and AI-powered extraction algorithms.
+
+## 🚀 Advanced Features
+
+### 🎯 Intelligent Detection Engine
+*   **Multi-Protocol Support:** Advanced HLS (.m3u8), DASH (.mpd), and adaptive bitrate streaming
+*   **Encryption Handling:** AES-128, SAMPLE-AES decryption with automatic key extraction
+*   **Deep Network Analysis:** Intercepts fetch/XHR/WebSocket requests for comprehensive media discovery
+*   **Shadow DOM Scanning:** Detects hidden media in isolated DOM contexts
+*   **Pattern Recognition:** Advanced algorithms for identifying obfuscated media URLs
+
+### 🔒 Advanced Cryptography
+*   **Native Decryption:** Pure JavaScript AES implementation for encrypted streams
+*   **Key Derivation:** Mathematical algorithms for extracting encryption keys from manifests
+*   **Multi-Key Streams:** Handles complex encryption scenarios with key rotation
+*   **Segment Decryption:** Per-segment decryption with IV management
+
+### 🌐 Platform-Specific Extractors
+*   **YouTube:** Advanced extraction with quality selection and live stream support
+*   **Facebook:** Comprehensive video detection including React components
+*   **TikTok:** Multi-method extraction with music track separation
+*   **Generic:** Universal extractor for unknown platforms
+
+### 🎨 Professional UI
+*   **Shadow DOM Isolation:** Zero interference with target websites
+*   **Batch Downloads:** Select and download multiple files simultaneously
+*   **Quality Selection:** Choose from available formats and resolutions
+*   **Progress Tracking:** Real-time download progress with speed and ETA
+*   **Dark/Light Themes:** Modern, responsive interface
+
+### ⚡ Performance & Stealth
+*   **Concurrent Downloads:** Multi-threaded downloading with intelligent queuing
+*   **Request Randomization:** Mimics natural browser behavior to avoid detection
+*   **Rate Limiting:** Respects server resources and avoids triggering anti-bot measures
+*   **Memory Optimization:** Efficient handling of large files and streaming content
+
 # PegaTudo - Production-Ready Browser Extension
 
 <div align="center">
@@ -19,6 +58,7 @@
 - **Blob URL Detection**: Captures protected media through blob: URL interception
 - **Batch Downloads**: Select multiple files and download them all at once
 - **Real-time Detection**: Updates media list as new content loads dynamically
+
 
 ### User Interface
 - **Clean, Responsive Design**: Modern popup interface with categorized media lists
