@@ -12,7 +12,8 @@
     "tabs",
     "debugger",
     "declarativeNetRequest",
-    "webRequest"
+    "webRequest",
+ 
   ],
   "host_permissions": [
     "<all_urls>"
@@ -31,6 +32,9 @@
       ],
       "css": ["src/css/popup.css", "src/css/features/toast.css"],
       "run_at": "document_start"
+      "js": ["src/js/utils.js", "src/js/interceptor.js", "src/js/content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
     }
   ],
   "web_accessible_resources": [

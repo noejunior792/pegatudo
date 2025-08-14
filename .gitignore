@@ -1,1 +1,8 @@
 .env
+test.html
+*.zip
+node_modules/
+dist/
+.vscode/
+.DS_Store
+Thumbs.db
